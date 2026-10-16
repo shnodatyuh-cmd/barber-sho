@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barber Shop | Fades, Cairo</title>
+<meta name="description" content="Low, taper, curly and high fades. See prices, opening hours and branches, then book your chair.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#eef1f4; --ink:#12263f; --ink-2:#1c3857; --pole:#c8372d; --steel:#5d6f82; --line:#cfd6de; --white:#fff;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Barlow",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;font-size:17px}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pole);outline-offset:3px}
+.wrap{width:min(1100px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);line-height:1;letter-spacing:.01em}
+h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;margin-bottom:28px}
+
+/* buttons */
+.btn{font:600 1rem var(--body);display:inline-block;padding:13px 28px;border-radius:6px;border:2px solid var(--pole);background:var(--pole);color:var(--white);cursor:pointer;text-decoration:none;transition:background .2s,color .2s,transform .2s}
+.btn:hover{background:var(--white);color:var(--pole);transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--white);border-color:rgba(255,255,255,.5)}
+.btn.ghost:hover{background:var(--white);color:var(--ink);border-color:var(--white)}
+.btn.small{padding:9px 18px;font-size:.92rem}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(18,38,63,.96);backdrop-filter:blur(6px);color:var(--white)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font:800 1.5rem var(--display);text-decoration:none;letter-spacing:.04em}
+.nav ul{list-style:none;display:flex;gap:26px;padding:0}
+.nav ul a{text-decoration:none;font-weight:500;opacity:.85}
+.nav ul a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--pole)}
+
+/* hero */
+.hero{background:var(--ink);color:var(--white);overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center;padding-block:80px}
+.hero h1{font-size:clamp(3.4rem,10vw,7.2rem);font-weight:800;text-transform:uppercase}
+.hero p{max-width:50ch;margin:24px 0 32px;color:#c9d4e0}
+.hero .actions{display:flex;gap:14px;flex-wrap:wrap}
+.pole{justify-self:center;width:84px;height:360px;border-radius:42px;border:6px solid var(--white);position:relative;overflow:hidden;box-shadow:0 0 0 6px var(--ink-2)}
+.pole::before{content:"";position:absolute;inset:-100px 0;background:repeating-linear-gradient(-45deg,var(--pole) 0 26px,var(--white) 26px 52px,#2b5b9a 52px 78px,var(--white) 78px 104px);animation:spin 3s linear infinite}
+@keyframes spin{to{transform:translateY(147px)}}
+
+/* fades list */
+section{padding-block:80px}
+.fades{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.fade{background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.fade img{width:100%;aspect-ratio:1;object-fit:cover}
+.fade div{padding:18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.fade h3{font-size:1.7rem;font-weight:700}
+.fade .price{font-weight:600;color:var(--pole);margin-bottom:10px}
+.fade .btn{margin-top:auto;text-align:center}
+
+/* hours + branches */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.hours{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.hours th,.hours td{padding:13px 18px;text-align:left;border-bottom:1px solid var(--line)}
+.hours th{background:var(--ink);color:var(--white);font-weight:600}
+.hours tr:last-child td{border-bottom:0}
+.hours tr.today td{background:#fbe9e7;font-weight:600;box-shadow:inset 4px 0 0 var(--pole)}
+.branches{list-style:none;padding:0;display:grid;gap:14px}
+.branches li{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--pole);border-radius:6px;padding:16px 18px}
+.branches strong{display:block;font:700 1.35rem var(--display)}
+.branches span{color:var(--steel);font-size:.97rem}
+
+/* footer */
+footer{background:var(--ink);color:#c9d4e0;text-align:center;padding:48px 20px}
+footer h2{color:var(--white);margin-bottom:16px}
+footer p{margin-bottom:24px}
+footer small{display:block;margin-top:32px;opacity:.6}
+
+/* booking dialog */
+dialog{border:0;border-radius:10px;padding:30px;width:min(440px,92vw);margin:auto;color:var(--ink)}
+dialog::backdrop{background:rgba(10,20,35,.65)}
+dialog h2{font-size:2.2rem;margin-bottom:6px}
+dialog form{display:grid;gap:14px;margin-top:18px}
+label{display:grid;gap:5px;font-weight:600;font-size:.95rem}
+input,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:6px;background:var(--paper)}
+input:focus,select:focus{border-color:var(--ink);outline:none}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+.row .btn.ghost{color:var(--ink);border-color:var(--line)}
+.row .btn.ghost:hover{background:var(--paper);color:var(--ink)}
+#done{display:none;text-align:center;padding:10px 0}
+#done h3{font-size:2rem;margin-bottom:8px}
+
+@media (max-width:860px){
+  .fades{grid-template-columns:repeat(2,1fr)}
+  .split{grid-template-columns:1fr;gap:44px}
+  .hero .wrap{grid-template-columns:1fr;padding-block:56px}
+  .pole{display:none}
+  .nav ul{display:none}
+}
+@media (max-width:480px){.fades{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">BARBER SHOP</a>
+    <ul>
+      <li><a href="#fades">Fades</a></li>
+      <li><a href="#hours">Hours</a></li>
+      <li><a href="#branches">Branches</a></li>
+    </ul>
+    <button class="btn small" data-book>Book now</button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Clean fades.<br>Sharp lines.</h1>
+        <p>A fade blends your hair from longer on top to very short at the sides and back. Pick a low, taper, curly or high fade and we shape it to your head and hair texture.</p>
+        <div class="actions">
+          <button class="btn" data-book>Book now</button>
+          <a class="btn ghost" href="#fades">See prices</a>
+        </div>
+      </div>
+      <div class="pole" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <section id="fades">
+    <div class="wrap">
+      <h2>Our fades</h2>
+      <div class="fades">
+        <article class="fade">
+          <img src="./ imageslow-fade (1).webp" alt="Low fade haircut" loading="lazy">
+          <div><h3>Low fade</h3><p class="price">100 L.E</p><button class="btn small" data-book data-service="Low fade">Book now</button></div>
+        </article>
+        <article class="fade">
+          <img src="./ imageslow-fade (2).webp" alt="Taper fade haircut" loading="lazy">
+          <div><h3>Taper fade</h3><p class="price">120 L.E</p><button class="btn small" data-book data-service="Taper fade">Book now</button></div>
+        </article>
+        <article class="fade">
+          <img src="./ imageslow-fade (3).webp" alt="Curly fade haircut" loading="lazy">
+          <div><h3>Curly fade</h3><p class="price">140 L.E</p><button class="btn small" data-book data-service="Curly fade">Book now</button></div>
+        </article>
+        <article class="fade">
+          <img src="./ imageslow-fade (5).webp" alt="High fade haircut" loading="lazy">
+          <div><h3>High fade</h3><p class="price">200 L.E</p><button class="btn small" data-book data-service="High fade">Book now</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--white);border-block:1px solid var(--line)">
+    <div class="wrap split">
+      <div id="hours">
+        <h2>Opening hours</h2>
+        <table class="hours">
+          <thead><tr><th>Day</th><th>Hours</th></tr></thead>
+          <tbody>
+            <tr data-day="1"><td>Monday</td><td>12:00 AM – 12:00 PM</td></tr>
+            <tr data-day="2"><td>Tuesday</td><td>10:00 AM – 11:00 PM</td></tr>
+            <tr data-day="3"><td>Wednesday</td><td>9:00 AM – 10:00 PM</td></tr>
+            <tr data-day="4"><td>Thursday</td><td>10:00 AM – 12:00 AM</td></tr>
+            <tr data-day="5"><td>Friday</td><td>1:00 PM – 11:00 PM</td></tr>
+            <tr data-day="6"><td>Saturday</td><td>10:00 AM – 10:00 PM</td></tr>
+            <tr data-day="0"><td>Sunday</td><td>11:30 AM – 9:00 PM</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="branches">
+        <h2>Our branches</h2>
+        <ul class="branches">
+          <li><strong>Al-Montazah direction</strong><span>Gamal Abdel Nasser St., next to Bank Audi and Karam El Sham, after Bridge 45</span></li>
+          <li><strong>Zahraa Al-Maadi, Cairo</strong><span>Al-Khamsin St., after Hub 50 Mall, behind Bazooka and next to Karam Al-Sham</span></li>
+          <li><strong>Victoria Square</strong><span>Emmanuel Duran Victor St., Uncle Noel, Cotton Towers</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <h2>Ready for a fresh cut?</h2>
+  <p>Book a chair online or message us on Facebook.</p>
+  <button class="btn" data-book>Book now</button>
+  <a class="btn ghost" href="http://www.facebook.com" target="_blank" rel="noopener">Contact us</a>
+  <small>&copy; 2026 Barber Shop. A front-end practice project.</small>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dt">
+  <div id="formWrap">
+    <h2 id="dt">Book your chair</h2>
+    <p>Choose a service and a time. We will confirm with you.</p>
+    <form id="form" method="dialog">
+      <label>Name<input name="name" required autocomplete="name"></label>
+      <label>Phone<input name="phone" type="tel" required autocomplete="tel" pattern="[0-9+ ]{8,15}"></label>
+      <label>Service
+        <select name="service" id="service">
+          <option>Low fade</option><option>Taper fade</option><option>Curly fade</option><option>High fade</option>
+        </select>
+      </label>
+      <label>Date<input name="date" id="date" type="date" required></label>
+      <div class="row">
+        <button type="button" class="btn ghost small" id="cancel">Cancel</button>
+        <button type="submit" class="btn small">Confirm booking</button>
+      </div>
+    </form>
+  </div>
+  <div id="done">
+    <h3>Booking sent</h3>
+    <p id="doneMsg"></p>
+    <div class="row" style="justify-content:center"><button class="btn small" id="close">Close</button></div>
+  </div>
+</dialog>
+
+<script>
+const dlg = document.getElementById('dlg');
+const form = document.getElementById('form');
+const date = document.getElementById('date');
+date.min = new Date().toISOString().split('T')[0];
+
+// highlight today's row
+const today = document.querySelector('.hours tr[data-day="' + new Date().getDay() + '"]');
+if (today) today.classList.add('today');
+
+function openBooking(service){
+  document.getElementById('formWrap').style.display = '';
+  document.getElementById('done').style.display = 'none';
+  if (service) document.getElementById('service').value = service;
+  dlg.showModal();
+}
+document.querySelectorAll('[data-book]').forEach(b =>
+  b.addEventListener('click', () => openBooking(b.dataset.service)));
+
+document.getElementById('cancel').addEventListener('click', () => dlg.close());
+document.getElementById('close').addEventListener('click', () => dlg.close());
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const d = new FormData(form);
+  document.getElementById('doneMsg').textContent =
+    d.get('name') + ', your ' + d.get('service').toLowerCase() + ' is requested for ' + d.get('date') + '. We will call ' + d.get('phone') + ' to confirm.';
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('done').style.display = 'block';
+  form.reset();
+});
+</script>
+</body>
+</html>
